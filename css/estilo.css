@@ -31,8 +31,8 @@ a{
 }
 h3{
 	width:100%;
-	max-height:40px;
-	min-height:40px;
+	max-height:43px;
+	min-height:43px;
 	float:left;
 	margin-bottom:10px;
 	overflow:hidden;
@@ -156,10 +156,13 @@ div:after, ol:after, form:after, ul:after, dl:after {
     border-left:1px solid #eee;
 }
 .bt{
+	width:28px;
+	height:40px;
 	position:absolute;
 	top: 35%;
 	background:transparent;
 	border:none;
+	cursor:pointer;
 }
 .carousel-previous{
 	left:210px;
@@ -171,6 +174,8 @@ div:after, ol:after, form:after, ul:after, dl:after {
 	content:"";
 	width: 0;
 	height: 0;
+	left:0;
+	top:0;
 	position:absolute;
 	border-style: solid;
 	cursor:pointer;
