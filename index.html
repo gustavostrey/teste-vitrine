@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Chaordic</title>
+		<link type="text/css" rel="stylesheet" href="css/estilo.css" />
+	</head>
+	<body>
+		<div id="content">
+			<div class="visited">
+				<strong class="title visited-product">Você visitou:</strong>
+				<strong class="title interest-product">e talvez se interesse por:</strong>
+			</div>
+			<button class="bt carousel-previous" onclick="pagination(-1)"></button>
+			<button class="bt carousel-advance" onclick="pagination(1)"></button>
+		</div>
+		<script>
+			var current = 0;
+			var total;
+			function jsonp(url, callback) {
+			    var callbackName = 'renderData';
+			    window[callbackName] = function(data) {
+			        delete window[callbackName];
+			        document.body.removeChild(script);
+			        callback(data);
+			    };
+
+			    var script = document.createElement('script');
+			    script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callback;
+			    document.body.appendChild(script);
+			}
+
+			var X = function(data){
+				total = data.data.widget.size;
+				build(data);
+			}
+
+			jsonp('http://roberval.chaordicsystems.com/challenge/challenge.json', 'X');
+
+			function build (data) 
+			{
+				if(data.data){
+
+					var info = data.data;
+
+					var item = info.reference.item;
+					var recommendationList = info.recommendation;
+
+					var itemHtml = prepareItem(item);
+					var recommendationHtml = prepareRecommendations(recommendationList);
+
+					var main = document.getElementById('content');
+					main.appendChild(itemHtml);
+					main.appendChild(recommendationHtml);
+					buildSlider();
+				}
+			}
+
+			function prepareItem(item)
+			{
+				var data = {};
+				data.image = item.imageName;
+				data.name = item.name;
+				data.oldPrice = item.oldPrice;
+				data.price = item.price;
+				data.paymentConditions = item.productInfo.paymentConditions;
+				var domList = [];
+				domList = [
+					{
+						type : 'img',
+						attr : 'src',
+						value : data.image,
+						classess : ''
+					},
+					{
+						type : 'h3',
+						attr : 'text',
+						value : data.name,
+						classess : ''
+					},
+					{
+						type : 'span',
+						attr : 'text',
+						value : data.oldPrice,
+						classess : 'old-price prices'
+					},
+					{
+						type : 'span',
+						attr : 'text',
+						value : data.price,
+						classess : 'special-price prices'
+					},
+					{
+						type : 'span',
+						attr : 'text',
+						value : data.paymentConditions,
+						classess : 'payment-conditions'
+					}
+				];
+				return render(domList, 'product');
+			}
+
+			function prepareRecommendations(itemList)
+			{
+				var slider = document.createElement('div');
+				slider.setAttribute('class', 'slider');
+				var ul = document.createElement('ul');
+				for(i in itemList)
+				{
+					var li = document.createElement('li');
+					var domList = [];
+					var data = itemList[i];
+
+					var name = createChild([
+						{
+							type : 'a',
+							attr : ['href', 'text'],
+							value : [data.detailUrl, data.name],
+							classess : ''
+						}
+					]);
+
+					var image = createChild([
+						{
+							type : 'img',
+							attr : ['src'],
+							value : [data.imageName],
+							classess : ''
+						}
+					]);
+
+					domList = [
+						{
+							type : 'a',
+							attr : ['href', 'text'],
+							value : [data.detailUrl, image],
+							classess : ''
+						},
+						{
+							type : 'h3',
+							attr : 'text',
+							value : name
+						},
+						{
+							type : 'span',
+							attr : 'text',
+							value : data.oldPrice,
+							classess : 'old-price prices'
+						},
+						{
+							type : 'span',
+							attr : 'text',
+							value : data.price,
+							classess : 'special-price prices'
+						},
+						{
+							type : 'span',
+							attr : 'text',
+							value : data.productInfo.paymentConditions,
+							classess : 'payment-conditions'
+						}
+					];
+					var newDom = render(domList, 'recommendations product', 'li');
+					ul.appendChild(newDom);
+				}
+				slider.appendChild(ul);
+				return slider;
+			}
+
+			function render(domList, className = '', type = 'div')
+			{
+				var childList = createChild(domList);
+				var dom = document.createElement(type);
+				dom.setAttribute('class', className);
+				for(i in childList){
+					dom.appendChild(childList[i]);
+				}
+				return dom;
+			}
+
+			function createChild(domList)
+			{
+				var childList = [];
+				var hasValue = false;
+				for(i in domList){	
+					var classList = domList[i].classess;
+					var dom = document.createElement(domList[i].type);
+					if(classList != undefined){
+						dom.setAttribute('class', classList);
+					}
+					if(domList[i].value != null){
+						var attrArray = [];
+						if(!Array.isArray(domList[i].attr)){
+							attrArray = [domList[i].attr];
+							valueArray = [domList[i].value];
+						}else{
+							attrArray = domList[i].attr;
+							valueArray = domList[i].value;
+						}
+						
+						for(i in attrArray){				
+							switch(attrArray[i]){
+								case 'text':
+									if(typeof valueArray[i] == 'object'){
+										hasValue = true;
+										dom.appendChild(valueArray[i][0]);
+									}else{
+										hasValue = true;
+										dom.innerHTML = valueArray[i];
+									}
+									break;
+								default:
+									hasValue = true;
+									dom.setAttribute(attrArray[i], valueArray[i]);
+									break;
+							}
+						}
+					}
+
+					if(hasValue){
+						childList.push(dom);
+						hasValue = false;
+					}
+				}
+				return childList;
+			}
+
+			function buildSlider()
+			{
+				var slider = document.getElementsByClassName('slider')[0];
+				var list = slider.querySelector('ul');
+				var items = slider.getElementsByTagName('li');
+				var first = current;
+				var second = (current + 1);
+				var thirth = (current + 2);
+				for(var i = 0; i < items.length; i++){
+					if(i == first || i == second || i == thirth){
+						items[i].style.display = 'block';
+					}else{
+						items[i].style.display = 'none';
+					}
+				}
+			}
+
+			function pagination(i)
+			{
+				var isLast = current <  (total - 3);
+				var isFirst = current == 0;
+				if(current => 0 && current < total)
+				{
+					if(i == 1 && isLast)
+					{
+						current += i;
+					}
+
+					if(i == -1 && current > 0)
+					{
+						current += i;
+					}
+				}
+
+				buildSlider();
+			}
+		</script>
+	</body>
+</html>

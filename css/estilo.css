@@ -1,0 +1,192 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, sub, sup, tt, var, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+margin :0;
+padding : 0;
+border : 0;
+font-size : 100%;
+font : inherit;
+}
+body{
+	font-size:100%;
+	font-family:Arial;
+	-webkit-font-smoothing: antialiased;
+	-moz-font-smoothing: antialiased;
+	-ms-font-smoothing: antialiased;
+	font-smoothing: antialiased;
+}
+*{
+	outline : none;
+}
+blockquote:before, blockquote:after, q:before, q:after {  
+	content : '';
+	content : none;
+}
+blockquote, q {
+	quotes : none;
+}  
+ol, ul {
+	list-style : none; 
+} 
+a{
+	text-decoration:none; 
+}
+h3{
+	width:100%;
+	max-height:40px;
+	min-height:40px;
+	float:left;
+	margin-bottom:10px;
+	overflow:hidden;
+	color:#575757;
+	font-size:12px;
+}
+h3 a{
+	color:#575757;
+}
+div:after, ol:after, form:after, ul:after, dl:after {
+	content:".";
+	display:block;
+	clear:both;
+	visibility:hidden;
+	height:0;
+	overflow:hidden;
+}
+/*** CONTENT *****/
+#content{
+	max-width:865px;
+	margin:100px auto 50px;
+	padding:0 15px;
+	position:relative;
+}
+/****** TITLE *****/
+.visited{
+	width:100%;
+	float:left;
+	padding:10px 0;
+	background:#e7f2fc;
+	border-top-left-radius:5px;
+	border-top-right-radius:5px;
+}
+.title{
+	color:#4e6699;
+}
+.visited-product{
+    width:17.66%;
+    float:left;
+    padding:0 1%;
+}
+.interest-product{
+    width:78%;
+    float:left;
+    padding:0 1%;
+}
+/****** BOX PRODUCT ***/
+.product{
+	width:170px;
+	float:left;
+	margin:10px 10px 0 0;
+	padding:5px;
+}
+.product.recommendations{
+	width:181px;
+}
+.product img{
+	max-width:90%;
+	margin:0 auto 15px;
+	display:block;
+	padding:5px;
+	background:#fff;
+	border:2px solid transparent;
+}
+.product:hover img{
+	border:2px solid #bdd0e0;
+}
+.product:hover h3 a,
+.product:hover h3{
+	color:#175b9c;
+}
+.product:hover{
+	background: rgba(215,234,249,1);
+	background: -moz-linear-gradient(top, rgba(215,234,249,1) 0%, rgba(215,234,249,1) 3%, rgba(255,255,255,1) 100%);
+	background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(215,234,249,1)), color-stop(3%, rgba(215,234,249,1)), color-stop(100%, rgba(255,255,255,1)));
+	background: -webkit-linear-gradient(top, rgba(215,234,249,1) 0%, rgba(215,234,249,1) 3%, rgba(255,255,255,1) 100%);
+	background: -o-linear-gradient(top, rgba(215,234,249,1) 0%, rgba(215,234,249,1) 3%, rgba(255,255,255,1) 100%);
+	background: -ms-linear-gradient(top, rgba(215,234,249,1) 0%, rgba(215,234,249,1) 3%, rgba(255,255,255,1) 100%);
+	background: linear-gradient(to bottom, rgba(215,234,249,1) 0%, rgba(215,234,249,1) 3%, rgba(255,255,255,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d7eaf9', endColorstr='#ffffff', GradientType=0 );
+}
+.prices,
+.payment-conditions{
+	width:100%;
+	float:left;
+	margin:0 0 5px 0;
+}
+.old-price{
+	font-size:12px;
+}
+.special-price,
+.payment-conditions{
+	color:#f00;
+    font-weight: 700;
+}
+.old-price::before{
+	content : 'De:';			
+}
+.special-price::before{
+	content : 'Por:';
+	font-size:11px;
+	font-weight:300;
+}
+.prices::before{
+	margin-right:2px;
+	font-size:11px;
+}
+.payment-conditions{
+	font-size:11px;
+}
+.payment-conditions::after{
+	content:"sem juros";
+	margin-left:5px;
+	font-weight:300;
+}
+/***** SLIDER ***/
+.slider{
+	width:69.8%;
+    float:left;
+    padding:0 35px;
+    border-left:1px solid #eee;
+}
+.bt{
+	position:absolute;
+	top: 35%;
+	background:transparent;
+	border:none;
+}
+.carousel-previous{
+	left:210px;
+}
+.carousel-advance{
+	right:30px;
+}
+.bt::before{
+	content:"";
+	width: 0;
+	height: 0;
+	position:absolute;
+	border-style: solid;
+	cursor:pointer;
+	transition:all 0.3s ease;
+}
+.carousel-previous::before{
+	border-width: 20px 20px 20px 0;
+	border-color: transparent #a5a5a5 transparent transparent;
+}
+.carousel-advance::before{
+	border-width: 20px 0 20px 20px;
+	border-color: transparent transparent transparent #a5a5a5;
+}
+.carousel-previous:hover::before{
+	border-color: transparent #175b9c transparent transparent;
+}
+.carousel-advance:hover::before{
+	border-color: transparent transparent transparent #175b9c;
+}
