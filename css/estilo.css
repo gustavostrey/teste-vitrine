@@ -168,7 +168,7 @@ div:after, ol:after, form:after, ul:after, dl:after {
 	left:210px;
 }
 .carousel-advance{
-	right:30px;
+	right:8px; 
 }
 .bt::before{
 	content:"";

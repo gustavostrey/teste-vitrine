@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8">
-		<title>Chaordic</title>
+		<title>Teste Vitrine</title>
 		<link type="text/css" rel="stylesheet" href="css/estilo.css" />
 	</head>
 	<body>
@@ -11,12 +11,19 @@
 				<strong class="title visited-product">Você visitou:</strong>
 				<strong class="title interest-product">e talvez se interesse por:</strong>
 			</div>
-			<button class="bt carousel-previous" onclick="pagination(-1)"></button>
-			<button class="bt carousel-advance" onclick="pagination(1)"></button>
+			<button class="bt carousel-previous"></button>
+			<button class="bt carousel-advance"></button>
 		</div>
 		<script>
 			var current = 0;
-			var total;
+			var total = 0;
+			var sliderQty = 3;
+
+			window.onload = function(){
+				jsonp('http://roberval.chaordicsystems.com/challenge/challenge.json', 'X');
+				bindButtons();
+			}
+
 			function jsonp(url, callback) {
 			    var callbackName = 'renderData';
 			    window[callbackName] = function(data) {
@@ -31,24 +38,21 @@
 			}
 
 			var X = function(data){
-				total = data.data.widget.size;
-				build(data);
+				if(data.data){
+					total = data.data.widget.size;
+					build(data);
+				}
 			}
 
-			jsonp('http://roberval.chaordicsystems.com/challenge/challenge.json', 'X');
 
 			function build (data) 
 			{
-				if(data.data){
-
+				if(data){
 					var info = data.data;
-
 					var item = info.reference.item;
 					var recommendationList = info.recommendation;
-
 					var itemHtml = prepareItem(item);
 					var recommendationHtml = prepareRecommendations(recommendationList);
-
 					var main = document.getElementById('content');
 					main.appendChild(itemHtml);
 					main.appendChild(recommendationHtml);
@@ -228,38 +232,78 @@
 			function buildSlider()
 			{
 				var slider = document.getElementsByClassName('slider')[0];
-				var list = slider.querySelector('ul');
 				var items = slider.getElementsByTagName('li');
-				var first = current;
-				var second = (current + 1);
-				var thirth = (current + 2);
 				for(var i = 0; i < items.length; i++){
-					if(i == first || i == second || i == thirth){
+					if(i >= current && i <= (sliderQty + current -1)){
 						items[i].style.display = 'block';
 					}else{
 						items[i].style.display = 'none';
 					}
 				}
+				toggleButtons();
 			}
 
-			function pagination(i)
-			{
-				var isLast = current <  (total - 3);
-				var isFirst = current == 0;
-				if(current => 0 && current < total)
-				{
-					if(i == 1 && isLast)
-					{
-						current += i;
-					}
 
-					if(i == -1 && current > 0)
-					{
-						current += i;
-					}
+			function pageDown()
+			{
+				if(!isFirst())
+				{
+					current--;
 				}
 
 				buildSlider();
+			}
+
+			function pageUp()
+			{
+				if(!isLast())
+				{
+					current++;
+				}
+
+				buildSlider();
+			}
+
+			function bindButtons()
+			{
+				toggleButtons(true);
+			}
+
+			function toggleButtons(bind = false)
+			{
+				var previous = document.getElementsByClassName('carousel-previous')[0];
+				var next = document.getElementsByClassName('carousel-advance')[0];
+				if(bind){				
+					previous.addEventListener("click", pageDown);
+					previous.addEventListener("click", toggleButtons, true); 
+					next.addEventListener("click", pageUp);
+					next.addEventListener("click", toggleButtons, true); 
+				}
+				toggle(previous, isFirst());
+				toggle(next, isLast());
+			}
+
+			function isFirst()
+			{
+				return current == 0;
+			}
+
+			function isLast()
+			{
+				return current == ( total - sliderQty );
+			}
+
+			function toggle(dom, show)
+			{
+				switch(show)
+				{
+					case true:
+						dom.style.display = 'none';
+						break;
+					default:
+						dom.style.display = 'initial';
+						break;
+				}
 			}
 		</script>
 	</body>
